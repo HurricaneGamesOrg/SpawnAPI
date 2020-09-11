@@ -8,7 +8,7 @@ public class SpawnAPIPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		getServer().getServicesManager().register(SpawnAPI.class, MainWorldSpawnAPIImpl.getInstance(), this, ServicePriority.Lowest);
-		new SpawnAPIIntegration.Hook(this){}.hook();
+		SpawnAPIIntegration.Hook.hook(this);
 	}
 
 }

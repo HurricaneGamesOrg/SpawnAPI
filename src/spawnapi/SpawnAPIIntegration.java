@@ -31,15 +31,16 @@ public class SpawnAPIIntegration {
 
 	protected static class Hook implements Listener {
 
+		protected static void hook(Plugin plugin) {
+			Hook hookinst = new Hook(plugin);
+			plugin.getServer().getPluginManager().registerEvents(hookinst, plugin);
+			hookinst.hook0();
+		}
+
 		protected final Plugin plugin;
 
 		protected Hook(Plugin plugin) {
 			this.plugin = plugin;
-		}
-
-		protected void hook() {
-			plugin.getServer().getPluginManager().registerEvents(this, plugin);
-			hook0();
 		}
 
 		private void hook0() {
