@@ -1,9 +1,11 @@
 package spawnapi;
 
+import java.util.logging.Level;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.event.server.ServiceRegisterEvent;
+import org.bukkit.event.server.ServiceUnregisterEvent;
 import org.bukkit.plugin.Plugin;
 
 public class SpawnAPIIntegration {
@@ -43,21 +45,23 @@ public class SpawnAPIIntegration {
 		private void hook0() {
 			try {
 				SpawnAPI servicesSpawnAPI = plugin.getServer().getServicesManager().load(SpawnAPI.class);
-				if (servicesSpawnAPI != null) {
+				if (servicesSpawnAPI != instance.spawnapi) {
 					instance.spawnapi = servicesSpawnAPI;
+					plugin.getLogger().log(Level.INFO, "SpawnAPI implementation set to " + servicesSpawnAPI.getClass().getName());
 				}
 			} catch (Throwable e) {
 				instance.spawnapi = MainWorldSpawnAPIImpl.getInstance();
+				plugin.getLogger().log(Level.WARNING, "Error hooking SpawnAPI implementation, using main world spawnapi implementation", e);
 			}
 		}
 
 		@EventHandler
-		private void onPluginEnable(PluginEnableEvent event) {
+		private void onServiceRegister(ServiceRegisterEvent event) {
 			hook0();
 		}
 
 		@EventHandler
-		private void onPluginDisable(PluginDisableEvent event) {
+		private void onServiceUnregister(ServiceUnregisterEvent event) {
 			hook0();
 		}
 
